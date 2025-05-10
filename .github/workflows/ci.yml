@@ -42,7 +42,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const report = JSON.parse(fs.readFileSync('semgrep-report.json', 'utf8'));
+            const report = JSON.parse(fs.readFileSync('semgrep_report.json', 'utf8'));
             for (const result of report.results) {
               const title = `Semgrep Issue: ${result.check_id}`;
               const body = `
