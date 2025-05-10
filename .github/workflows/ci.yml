@@ -59,9 +59,3 @@ jobs:
         with:
           target: 'http://localhost:3000'
           fail-action: ignore
-
-      - name: Upload ZAP Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: owasp-zap-report-manual
-          path: /zap/wrk/owasp-zap-report.html
