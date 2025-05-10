@@ -1,55 +1,50 @@
-name: Security CI/CD Pipeline
+name: DevSecOps Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
-
-permissions:
-  contents: read
-  actions: read
-  issues: write
-  pull-requests: write
+    branches: [ main ]
 
 jobs:
-  sast-semgrep:
+  sast:
+    name: Static Analysis (SAST) with Semgrep
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up Python (Semgrep requires it)
-        uses: actions/setup-python@v5
-
-      - name: Install Semgrep
-        run: pip install semgrep
-
-      - name: Run Semgrep scan
-        run: semgrep --config auto --json > semgrep-report.json || true
-
-  dast-zap:
-    runs-on: ubuntu-latest
-    needs: [sast-semgrep]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          node-version: '18'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: npm install
+        run: pip install semgrep
 
-      - name: Start Insecure App
-        run: |
-          npm start &
-          sleep 10
+      - name: Run Semgrep
+        run: semgrep --config auto .
 
-      - name: Run OWASP ZAP Scan
-        uses: zaproxy/action-full-scan@v0.8.0
+  build-and-deploy:
+    name: Build and Deploy App (Placeholder)
+    runs-on: ubuntu-latest
+    needs: sast
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build step
+        run: echo "Build your app here"
+
+      - name: Deploy step
+        run: echo "Deploy to staging or use Docker locally"
+
+  dast:
+    name: Dynamic Analysis (DAST) with OWASP ZAP
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    steps:
+      - name: Run OWASP ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.9.0
         with:
-          target: 'http://localhost:3000'
-          fail-action: ignore
+          target: 'http://example.com'  # замените на URL вашего развернутого приложения
