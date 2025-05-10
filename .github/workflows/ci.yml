@@ -57,7 +57,7 @@ jobs:
 
       - name: Run OWASP ZAP Docker scan
         run: |
-          docker pull owasp/zap2docker-stable  # Загрузка образа OWASP ZAP
-          docker run -u zap -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:5000 -g gen.conf -r zap_report.html
+          sudo docker pull owasp/zap2docker-stable  # Загрузка образа OWASP ZAP
+          sudo docker run -u zap -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:5000 -g gen.conf -r zap_report.html
         env:
           DISPLAY: ":99"
