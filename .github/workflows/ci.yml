@@ -63,5 +63,5 @@ jobs:
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
-          name: owasp-zap-report
+          name: owasp-zap-report-manual
           path: /zap/wrk/owasp-zap-report.html
