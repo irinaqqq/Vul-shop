@@ -60,7 +60,7 @@ jobs:
 
       - name: Run Flask app in background
         run: |
-          nohup python vulnerable_with_false_positives.py &
+          nohup python main.py &
           sleep 10
 
       - name: OWASP ZAP Baseline Scan
