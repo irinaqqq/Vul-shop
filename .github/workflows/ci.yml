@@ -50,9 +50,12 @@ jobs:
         run: |
           pip install flask
 
+      - name: Проверка наличия файла
+        run: ls -la
+
       - name: Run Flask app in background
         run: |
-          nohup python vulnerable_with_false_positives.py &
+          nohup python ./vulnerable_with_false_positives.py &
           sleep 10
 
       - name: OWASP ZAP Scan
