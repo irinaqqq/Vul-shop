@@ -38,28 +38,28 @@ jobs:
           name: semgrep-report  # Простое имя для артефакта
           path: semgrep_report.json
       - name: Create GitHub Issues from Semgrep Report
-          uses: actions/github-script@v6
-          with:
-            script: |
-              const fs = require('fs');
-              const report = JSON.parse(fs.readFileSync('semgrep-report.json', 'utf8'));
-              for (const result of report.results) {
-                const title = `Semgrep Issue: ${result.check_id}`;
-                const body = `
-                  **Path:** ${result.path}
-                  **Line:** ${result.start.line}
-                  **Message:** ${result.extra.message}
-                  **Severity:** ${result.extra.severity}
-                  **Link:** ${result.extra.metadata?.references?.[0] || 'N/A'}
-                `;
-                await github.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: title,
-                  body: body,
-                  labels: ['semgrep', result.extra.severity]
-                });
-              }
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('semgrep-report.json', 'utf8'));
+            for (const result of report.results) {
+              const title = `Semgrep Issue: ${result.check_id}`;
+              const body = `
+                **Path:** ${result.path}
+                **Line:** ${result.start.line}
+                **Message:** ${result.extra.message}
+                **Severity:** ${result.extra.severity}
+                **Link:** ${result.extra.metadata?.references?.[0] || 'N/A'}
+              `;
+              await github.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['semgrep', result.extra.severity]
+              });
+            }
 
   dast:
     name: Dynamic App Scan (OWASP ZAP)
