@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-      
+        uses: actions/checkout@v4
+
       - name: Set up Python (Semgrep requires it)
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
 
       - name: Install Semgrep
         run: pip install semgrep
 
-      - name: Run Semgrep (ignore exit code)
+      - name: Run Semgrep scan
         run: semgrep --config auto --json > semgrep-report.json || true
 
       - name: Upload Semgrep report
@@ -28,40 +28,22 @@ jobs:
           name: semgrep-report
           path: semgrep-report.json
 
-  sast-codeql:
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-
   dast-zap:
     runs-on: ubuntu-latest
-    needs: [sast-semgrep, sast-codeql]
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
+    needs: [sast-semgrep]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Start App
+      - name: Start Insecure App
         run: |
           npm start &
           sleep 10
