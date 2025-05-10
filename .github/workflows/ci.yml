@@ -55,9 +55,7 @@ jobs:
           nohup python vulnerable_with_false_positives.py &
           sleep 10
 
-      - name: Run OWASP ZAP Docker scan
-        run: |
-          sudo docker pull owasp/zap2docker-stable  # Загрузка образа OWASP ZAP
-          sudo docker run -u zap -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:5000 -g gen.conf -r zap_report.html
-        env:
-          DISPLAY: ":99"
+      - name: OWASP ZAP Scan
+        uses: zaproxy/action-baseline@v0.9.0
+        with:
+          target: 'http://localhost:5000'
