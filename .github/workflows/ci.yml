@@ -58,7 +58,7 @@ jobs:
           nohup python main.py &
           sleep 10
 
-      - name: OWASP ZAP Scan
-        uses: zaproxy/action-baseline@v0.9.0
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.12.0
         with:
           target: 'http://localhost:5000'
