@@ -37,12 +37,15 @@ jobs:
         with:
           name: semgrep_report  # Простое имя для артефакта
           path: semgrep_report.json
+          
       - name: Create GitHub Issues from Semgrep Report
         uses: actions/github-script@v6
         with:
           script: |
+            const { Octokit } = require("@octokit/rest");
             const fs = require('fs');
-            const report = JSON.parse(fs.readFileSync('semgrep_report.json', 'utf8'));
+            const report = JSON.parse(fs.readFileSync('semgrep-report.json', 'utf8'));
+            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
             for (const result of report.results) {
               const title = `Semgrep Issue: ${result.check_id}`;
               const body = `
@@ -52,7 +55,7 @@ jobs:
                 **Severity:** ${result.extra.severity}
                 **Link:** ${result.extra.metadata?.references?.[0] || 'N/A'}
               `;
-              await github.issues.create({
+              await octokit.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: title,
