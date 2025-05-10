@@ -1,0 +1,14 @@
+{
+    "name": "insecure-demo-app",
+    "version": "1.0.0",
+    "description": "Deliberately insecure Node.js app for CI/CD security demo",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js",
+      "test": "echo \"No tests yet\" && exit 0"
+    },
+    "dependencies": {
+      "express": "^4.18.4"
+    }
+  }
+  
