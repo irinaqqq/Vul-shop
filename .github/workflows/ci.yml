@@ -21,10 +21,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python (using version 3.10)
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10  # Убедись, что версия Python доступна
+          python-version: 3.11
 
       - name: Install Semgrep
         run: pip install semgrep
@@ -44,7 +44,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10  # Убедись, что версия Python доступна
+          python-version: 3.11  # Убедись, что версия Python доступна
 
       - name: Install dependencies
         run: |
